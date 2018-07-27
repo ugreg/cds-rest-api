@@ -17,11 +17,12 @@ Open `web.xml` in the webapp/WEB-INF/ folder. Fill in with your tenant and app r
 
 - `$ mvn package`
 
-This will generate a `adal4jsample.war` file in your /targets directory. Deploy this war file using Tomcat or any other J2EE container solution. To deploy on Tomcat container, copy the .war file to the webapps folder under your Tomcat installation and then start the Tomcat server.
+This will generate a `adal4jsample.war` file in your /targets directory. Deploy this [Deploy .war using Docker](https://www.youtube.com/watch?v=yOudtpXDPzw).
 
-This WAR will automatically be hosted at `http://<yourserverhost>:<yourserverport>/adal4jsample/`
-
-Example: `http://localhost:8080/adal4jsample/`
+```bash
+docker build -f Dockerfile -t adal4jsample.war
+docker run -p 8080:8080 -t adal4jsample
+```
 
 ### You're done!
 
