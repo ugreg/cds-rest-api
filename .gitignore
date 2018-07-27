@@ -1,0 +1,21 @@
+##########################
+## IntelliJ
+##########################
+*.iml
+.idea/
+*.ipr
+*.iws
+out/
+.idea_modules/
+gen/
+build/
+build.properties
+junit*.properties
+IgnoreLexer.java~
+.gradle
+
+##########################
+## OS X
+##########################
+.DS_Store
+greguniverseadal/src/main/webapp/WEB-INF/web.xml

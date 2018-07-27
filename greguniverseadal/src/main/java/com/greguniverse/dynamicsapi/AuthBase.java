@@ -1,4 +1,7 @@
-package java.dynamicsapi;
+package com.greguniverse.dynamicsapi;
+
+import java.net.MalformedURLException;
+import java.util.concurrent.ExecutionException;
 
 public abstract class AuthBase {
 
@@ -6,7 +9,7 @@ public abstract class AuthBase {
 
     }
 
-    public void auth() {
+    public void auth() throws MalformedURLException, ExecutionException, InterruptedException {
 
     }
 }

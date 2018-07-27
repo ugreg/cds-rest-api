@@ -6,7 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="greguniverse-adal" />
+        <module name="greguniverse-dynamics-api" />
         <module name="greguniverseadal" />
       </profile>
     </annotationProcessing>
