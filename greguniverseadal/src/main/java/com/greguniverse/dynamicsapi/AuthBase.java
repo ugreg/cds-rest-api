@@ -1,3 +1,5 @@
+package java.dynamicsapi;
+
 public abstract class AuthBase {
 
     public AuthBase() {

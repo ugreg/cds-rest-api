@@ -1,4 +1,4 @@
-package com.greguniverse.dynamicsapi;
+package java.dynamicsapi;
 
 public class Main {
     public static void  main(String args[]) {
