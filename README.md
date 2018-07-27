@@ -20,7 +20,8 @@ Open `web.xml` in the webapp/WEB-INF/ folder. Fill in with your tenant and app r
 This will generate a `adal4jsample.war` file in your /targets directory. Deploy this [Deploy .war using Docker](https://www.youtube.com/watch?v=yOudtpXDPzw).
 
 ```bash
-docker build -f Dockerfile -t adal4jsample.war
+docker build -f Dockerfile -t adal4jsample.war .
+// docker build -f <DOCKER FILE NAME> -t <DOCKER IMAGE NAME> .
 docker run -p 8080:8080 -t adal4jsample
 ```
 
