@@ -1,10 +1,19 @@
 # Dynamics REST APIs in Java
 Dynamics 365 REST API in Java.
 
+# Azure AD Setup Required
+
+
 # Deployment
 You will need the [mvn CLI](https://maven.apache.org/install.html).
 Complete the 5 setup steps using the [Java Web App using ADAL](https://github.com/Azure-Samples/active-directory-java-webapp-openidconnect) tutorial.
-These last two steps are the most important.
+
+
+> IMPORTANT
+>
+> Make sure you select "Grant Permission" for your app at https://portal.azure.com.
+
+These last two steps are also important.
 
 ### Step 4:  Configure the sample to use your Azure AD tenant
 
@@ -20,8 +29,9 @@ Open `web.xml` in the webapp/WEB-INF/ folder. Fill in with your tenant and app r
 This will generate a `adal4jsample.war` file in your /targets directory. Deploy this [Deploy .war using Docker](https://www.youtube.com/watch?v=yOudtpXDPzw).
 
 ```bash
-docker build -f Dockerfile -t adal4jsample.war .
 // docker build -f <DOCKER FILE NAME> -t <DOCKER IMAGE NAME> .
+docker build -f Dockerfile -t adal4jsample.war .
+docker images
 docker run -p 8080:8080 -t adal4jsample
 ```
 

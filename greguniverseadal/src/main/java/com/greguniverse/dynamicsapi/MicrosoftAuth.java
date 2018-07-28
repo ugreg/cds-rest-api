@@ -22,15 +22,18 @@ public class MicrosoftAuth extends AuthBase {
     @Override
     public void auth() {
 
-        // zs3wkoJAPOloYJMi+1MM8eAj33cO6Xo6RmxGbJl2bac=
-
         try {
             ExecutorService service = Executors.newFixedThreadPool(1);
-            String authorityUrl = "/";
             ExecutorService executor = Executors.newSingleThreadExecutor();
-            AuthenticationContext context = new AuthenticationContext(authorityUrl, false, service);
+            AuthenticationContext context = new AuthenticationContext(
+                    "https://login.microsoftonline.com/",
+                    false,
+                    service);
             Future<AuthenticationResult> future = context.acquireToken(
-                    "https://graph.windows.net", tenantId, username, password,
+                    "",
+                    "",
+                    "",
+                    "",
                     null);
             AuthenticationResult result = future.get();
             System.out.println("Access Token - " + result.getAccessToken());
