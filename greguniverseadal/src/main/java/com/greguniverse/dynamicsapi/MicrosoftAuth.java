@@ -2,7 +2,11 @@ package com.greguniverse.dynamicsapi;
 
 import com.microsoft.aad.adal4j.AuthenticationContext;
 import com.microsoft.aad.adal4j.AuthenticationResult;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
@@ -30,7 +34,7 @@ public class MicrosoftAuth extends AuthBase {
                     false,
                     service);
             Future<AuthenticationResult> future = context.acquireToken(
-                    "",
+                    "https://graph.microsoft.com",
                     "",
                     "",
                     "",
@@ -39,12 +43,36 @@ public class MicrosoftAuth extends AuthBase {
             System.out.println("Access Token - " + result.getAccessToken());
             System.out.println("Refresh Token - " + result.getRefreshToken());
             System.out.println("ID Token - " + result.getIdToken());
+
+            String url = "https://game.api.crm.dynamics.com/api/data/v9.0/accounts";
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(url)
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            String x = response.body().string();
+
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("Something went wrong with the ok http call :(");
+            e.printStackTrace();
         }
+    }
+
+    public void okhttp() {
+        String url = "https://game.api.crm.dynamics.com/api/data/v9.0/serviceendpoints";
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        Response response = client.newCall(request).execute();
+        String x = response.body().string();
     }
 }
