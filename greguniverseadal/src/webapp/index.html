@@ -4,7 +4,6 @@
     <title>ADAL Server to Server Multi Tenant Scenario</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-    <script src="https://secure.aadcdn.microsoftonline-p.com/lib/1.0.17/js/adal.min.js"></script>
 </head>
 <body role="document">
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -25,8 +24,8 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="app-user navbar-text"></li>
-                    <li><a href="javascript:;" class="app-logout">Logout</a></li>
-                    <li><a href="javascript:;" class="app-login">Login</a></li>
+                    <li><a href="javascript:;" class="app-logout" id="gunivserse-logout">Logout</a></li>
+                    <li><a href="javascript:;" class="app-login" id="gunivserse-login">Login</a></li>
                 </ul>
             </div>
         </div>
@@ -34,7 +33,9 @@
 
     <div class="container" role="main"></div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="https://secure.aadcdn.microsoftonline-p.com/lib/1.0.17/js/adal.min.js"></script>
+
+    <script src="Main.js"></script>
 </body>
 </html>

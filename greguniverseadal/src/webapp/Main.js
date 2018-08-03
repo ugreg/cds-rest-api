@@ -1,5 +1,7 @@
+var GregUniverseApi;
+(function (GregUniverseApi) {
 
-(function () {
+    var GregUniverseApi = GregUniverseApi || {};
 
     // Enter Global Config Values & Instantiate ADAL AuthenticationContext
     window.config = {
@@ -50,12 +52,15 @@
     };
 
     // Register NavBar Click Handlers
-    $signOutButton.click(function () {
+    var logout = function (params) {
         authContext.logOut();
-    });
-    $signInButton.click(function () {
+    }
+    document.getElementById("gunivserse-login").addEventListener("click", logout);
+
+    var login = function (params) {
         authContext.login();
-    });
+    }
+    document.getElementById("gunivserse-login").addEventListener("click", login);
 
     // Route View Requests To Appropriate Controller
     function loadCtrl(view) {
@@ -84,32 +89,10 @@
             authContext.login();
             return;
         }
-
-        // Load View HTML
-        $.ajax({
-            type: "GET",
-            url: "App/Views/" + view + '.html',
-            dataType: "html"
-        }).done(function (html) {
-
-            // Show HTML Skeleton (Without Data)
-            var $html = $(html);
-            $html.find(".data-container").empty();
-            $panel.html($html.html());
-            ctrl.postProcess(html);
-
-        }).fail(function () {
-            $errorMessage.html('Error loading page.');
-        }).always(function () {
-
-        });
     }
 
     function stripHash(view) {
         return view.substr(view.indexOf('#') + 1);
     }
-
-}());
-
-
+})(GregUniverseApi || (GregUniverseApi = {}));
 
