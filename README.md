@@ -2,7 +2,7 @@
 Dynamics 365 REST API in Java.
 
 # Azure AD Setup Required
-
+## Multi Tenant Auth
 
 # Deployment
 You will need the [mvn CLI](https://maven.apache.org/install.html).
