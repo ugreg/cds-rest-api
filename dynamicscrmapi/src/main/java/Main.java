@@ -1,13 +1,12 @@
 import java.io.IOException;
 import java.lang.String;
 import java.net.MalformedURLException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import com.microsoft.aad.adal4j.AuthenticationContext;
 import com.microsoft.aad.adal4j.AuthenticationResult;
@@ -42,8 +41,9 @@ public class Main {
             // TODO: 1
             // addOptionSetValuesDynamically(accessToken);
             // TODO: 2
-            createEmailWithPartyList(accessToken);
+            // createEmailWithPartyList(accessToken);
             // TODO: 3
+            readEntityAuditHistory(accessToken);
             // TODO: 4
             // TODO: 5
             // createWithDataReturned(accessToken);
@@ -228,7 +228,7 @@ public class Main {
     // TODO: 3
     // Retrieve Audit history data using OData Web API.
     // This URL /api/data/v9.1/audits This provides the overall summary. But we need the individual
-    public static void audit(String accessToken) {
+    public static void readEntityAuditHistory(String accessToken) {
 //        try {
 //            System.out.println("end");
 //        }
@@ -302,10 +302,10 @@ public class Main {
     }
 
     //  6. Bulk Operation
-    // - When we create bulk operation it returns code as 200 , response message as ok and input stream as batchresponse_8f8077da-1e2a-433e-84fa-d856365fcsdfsd
+    // - When we create bulk operation it returns code as 200 , response message as ok
+    //   and input stream as batchresponse_8f8077da-1e2a-433e-84fa-d856365fcsdfsd
     // - We can't get exact response and status of the batch process
     // - It’s not reflected in the CRM
-    //- Sample code (SampleBulkInsert.txt)
     public static void bulkInsert(String accessToken) {
 //        try {
 //            System.out.println("end");
