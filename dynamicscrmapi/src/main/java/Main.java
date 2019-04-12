@@ -228,12 +228,15 @@ public class Main {
     // TODO: 3
     // Retrieve Audit history data using OData Web API.
     // This URL /api/data/v9.1/audits This provides the overall summary. But we need the individual
-    public static void readEntityAuditHistory(String accessToken) {
+    // Settings > System > Auditing turn it on
+    // Make sure user has the proper audit security roles Core Records > Miscellaneous Privileges
+    // View Audit History - View Audit Summary - View Audit Partitions - Delete Audit Partitions
+//    public static void readEntityAuditHistory(String accessToken) {
 //        try {
 //            System.out.println("end");
 //        }
 //        catch (IOException e) {}
-    }
+//    }
 
     // TODO: 4
     // Associate:
