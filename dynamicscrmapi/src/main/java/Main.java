@@ -45,11 +45,12 @@ public class Main {
             // TODO: 2
             // createEmailWithPartyList(accessToken);
             // TODO: 3
-            readEntityAuditHistory(accessToken);
+            // readEntityAuditHistory(accessToken);
             // TODO: 4
             // TODO: 5
             // createWithDataReturned(accessToken);
             // TODO: 6
+            bacthAccountPost(accessToken);
         }
         catch (MalformedURLException e) { }
         catch (InterruptedException e) { }
@@ -346,15 +347,47 @@ public class Main {
         catch (IOException e) { }
     }
 
-    //  6. Bulk Operation
-    // - When we create bulk operation it returns code as 200 , response message as ok
-    //   and input stream as batchresponse_8f8077da-1e2a-433e-84fa-d856365fcsdfsd
-    // - We can't get exact response and status of the batch process
-    // - It’s not reflected in the CRM
-    public static void bulkInsert(String accessToken) {
-//        try {
-//            System.out.println("end");
-//        }
-//        catch (IOException e) {}
+    // TODO: 6
+    public static void bacthAccountPost(String accessToken) {
+        try {
+            OkHttpClient client = new OkHttpClient();
+
+            MediaType mediaType = MediaType.parse("multipart/mixed;boundary=changeset_BBB456");
+            RequestBody body = RequestBody.create(mediaType, "--batch_AAA123\r\n" +
+                    "Content-Type: multipart/mixed;boundary=changeset_BBB456\r\n\r\n" +
+                    "--changeset_BBB456\r\nContent-Type: application/http\r\n" +
+                    "Content-Transfer-Encoding:binary\r\n" +
+                    "Content-ID: 1\r\n\r\n" +
+                    "POST https://msott.api.crm.dynamics.com/api/data/v9.0/accounts HTTP/1.1\r\n" +
+                    "Content-Type: application/json;type=entry\r\n\r\n" +
+                    "{\"name\":\"batch95349\"}\r\n\r\n" +
+                    "--changeset_BBB456\r\n" +
+                    "Content-Type: application/http\r\n" +
+                    "Content-Transfer-Encoding:binary\r\nContent-ID: 2\r\n\r\n" +
+                    "POST https://msott.api.crm.dynamics.com/api/data/v9.0/accounts HTTP/1.1\r\n" +
+                    "Content-Type: application/json;type=entry\r\n\r\n" +
+                    "{\"name\":\"batch95349\"}\r\n\r\n" +
+                    "--changeset_BBB456\r\n" +
+                    "Content-Type: application/http\r\nContent-Transfer-Encoding:binary\r\n" +
+                    "Content-ID: 3\r\n\r\n" +
+                    "POST https://msott.api.crm.dynamics.com/api/data/v9.0/accounts HTTP/1.1\r\n" +
+                    "Content-Type: application/json;type=entry\r\n\r\n" +
+                    "{\"name\":\"batch95375469\"}\r\n\r\n" +
+                    "--changeset_BBB456--\r\n--" +
+                    "batch_AAA123--");
+            Request request = new Request.Builder()
+                    .url(REST_API_URL + "https://msott.api.crm.dynamics.com/api/data/v9.0/$batch")
+                    .post(body)
+                    .addHeader("Content-Type", "multipart/mixed;boundary=changeset_BBB456")
+                    .addHeader("Accept", "application/json")
+                    .addHeader("OData-MaxVersion", "4.0")
+                    .addHeader("OData-Version", "4.0")
+                    .addHeader("Authorization", "Bearer " + accessToken)
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            System.out.println("end");
+        }
+        catch (IOException e) {}
     }
 }
