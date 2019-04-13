@@ -1,11 +1,13 @@
 import java.io.IOException;
 import java.lang.String;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 import com.microsoft.aad.adal4j.AuthenticationContext;
@@ -231,12 +233,52 @@ public class Main {
     // Settings > System > Auditing turn it on
     // Make sure user has the proper audit security roles Core Records > Miscellaneous Privileges
     // View Audit History - View Audit Summary - View Audit Partitions - Delete Audit Partitions
-//    public static void readEntityAuditHistory(String accessToken) {
+    public static void readEntityAuditHistory(String accessToken) {
+        class DynamicsEntityAudit {
+            private String mChangeDate; // createdon
+            private String mChangedBy; // _userid_value
+            private String mEvent; // action
+            private String mChangedField; // attributemask
+            private String mOldValue;
+            private String mNewValue;
+            DynamicsEntityAudit(String changeDate, String changedBy, String event,
+                String changedField, String oldValue, String newValue) {
+                    mChangeDate = changeDate;
+                    mChangedBy = changedBy;
+                    mEvent = event;
+                    mChangedField = changedField;
+                    mOldValue = oldValue;
+                    mNewValue = newValue;
+            }
+            public String getmChangeDate() {
+                return mChangeDate;
+            }
+            public String getmChangedBy() {
+                return mChangedBy;
+            }
+            public String getmEvent() {
+                return mEvent;
+            }
+            public String getmChangedField() {
+                return mChangedField;
+            }
+            public String getmOldValue() {
+                return mOldValue;
+            }
+            public String getmNewValue() {
+                return mNewValue;
+            }
+        }
+
+        String accountId = "da084227-2f4b-e911-a830-000d3a1d5a4d";
+
+        List<DynamicsEntityAudit> dynamicsEntityAudits = new ArrayList<DynamicsEntityAudit>();
+
 //        try {
 //            System.out.println("end");
 //        }
 //        catch (IOException e) {}
-//    }
+    }
 
     // TODO: 4
     // Associate:
