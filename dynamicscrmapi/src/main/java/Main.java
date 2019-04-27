@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import com.google.gson.JsonObject;
 import com.microsoft.aad.adal4j.AuthenticationContext;
 import com.microsoft.aad.adal4j.AuthenticationResult;
 import com.microsoft.aad.adal4j.ClientCredential;
@@ -42,7 +43,7 @@ public class Main {
 
             // TODO: 1
             // addGlobalOptionSetValuesDynamically(accessToken);
-            // addLocalOptionSetValuesDynamically(accessToken);
+            addLocalOptionSetValuesDynamically(accessToken);
             // TODO: 2
             // createEmailWithPartyList(accessToken);
             // TODO: 3
@@ -61,6 +62,7 @@ public class Main {
     }
 
     // TODO: 1
+    // Check if local optoinset meta data GUID does not exists
     public static void addGlobalOptionSetValuesDynamically(String accessToken) {
         int previousValue = 0;
         String optionSetGuidString = "06d1a507-4d57-e911-a82a-000d3a1d5203";
@@ -152,63 +154,91 @@ public class Main {
     }
     public static void addLocalOptionSetValuesDynamically(String accessToken) {
         int previousValue = 0;
-        String optionSetGuidString = "06d1a507-4d57-e911-a82a-000d3a1d5203";
+        String entityLogicalname = "cr965_testcdsentity";
+        String optionSetLogicalName = "new_localoptionsettoform";
 
         try {
             OkHttpClient client = new OkHttpClient();
 
-            MediaType mediaType = MediaType.parse("application/json");
-            RequestBody body = RequestBody.create(mediaType, "{\r\n    \"AttributeLogicalName\": \"new_localoptionsettoform\",\r\n    \"EntityLogicalName\": \"cr965_testcdsentity\",\r\n    \"Value\": \"100000002\",\r\n    \"Label\": {\r\n        \"LocalizedLabels\": [\r\n            {\r\n                \"Label\": \"nerd\",\r\n                \"LanguageCode\": 1033,\r\n                \"IsManaged\": false,\r\n                \"MetadataId\": \"881daca2-5c68-e911-a825-000d3a1d501d\",\r\n                \"HasChanged\": null\r\n            }\r\n        ],\r\n        \"UserLocalizedLabel\": {\r\n            \"Label\": \"nerd\",\r\n            \"LanguageCode\": 1033,\r\n            \"IsManaged\": false,\r\n            \"MetadataId\": \"881daca2-5c68-e911-a825-000d3a1d501d\",\r\n            \"HasChanged\": null\r\n        }\r\n    },\r\n    \"Description\": {\r\n        \"LocalizedLabels\": [\r\n            {\r\n                \"Label\": \"\",\r\n                \"LanguageCode\": 1033,\r\n                \"IsManaged\": false,\r\n                \"MetadataId\": \"881daca2-5c68-e911-a825-000d3a1d501d\",\r\n                \"HasChanged\": null\r\n            }\r\n        ],\r\n        \"UserLocalizedLabel\": {\r\n            \"Label\": \"\",\r\n            \"LanguageCode\": 1033,\r\n            \"IsManaged\": false,\r\n            \"MetadataId\": \"881daca2-5c68-e911-a825-000d3a1d501d\",\r\n            \"HasChanged\": null\r\n        }\r\n    }\r\n}");
             Request request = new Request.Builder()
-                    .url("https://msott.api.crm.dynamics.com/api/data/v9.0/InsertOptionValue")
-                    .post(body)
-                    .addHeader("Content-Type", "application/json")
-                    .addHeader("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IkhCeGw5bUFlNmd4YXZDa2NvT1UyVEhzRE5hMCIsImtpZCI6IkhCeGw5bUFlNmd4YXZDa2NvT1UyVEhzRE5hMCJ9.eyJhdWQiOiJodHRwczovL21zb3R0LmFwaS5jcm0uZHluYW1pY3MuY29tLyIsImlzcyI6Imh0dHBzOi8vc3RzLndpbmRvd3MubmV0LzBiZTZhNTkzLTBlZmMtNGRhZC05ZTFiLTRhMWE2ODlmZTA2ZC8iLCJpYXQiOjE1NTYzMjk3NzksIm5iZiI6MTU1NjMyOTc3OSwiZXhwIjoxNTU2MzMzNjc5LCJhY3IiOiIxIiwiYWlvIjoiQVNRQTIvOExBQUFBd3d0eW45U2VyUHROVGFKZXFwR1VwVU5QVG1xOEVhbDgrNjlhdFlCU21DQT0iLCJhbXIiOlsicHdkIl0sImFwcGlkIjoiNGQxNzQyYTEtOGMzZi00OTEwLThlOTAtYzQ0MjQyZmFhODYwIiwiYXBwaWRhY3IiOiIxIiwiZmFtaWx5X25hbWUiOiJEZWdydXkiLCJnaXZlbl9uYW1lIjoiR3JlZyIsImlwYWRkciI6IjczLjI1Mi4yMDMuMTYiLCJuYW1lIjoiR3JlZyBEZWdydXkiLCJvaWQiOiIyZjNlYWE0Ny1mZTdmLTQ1MGYtOTdkZS0wMGEwM2JhMGY5YzUiLCJwdWlkIjoiMTAwMzAwMDBBNDhEMzJBMSIsInNjcCI6InVzZXJfaW1wZXJzb25hdGlvbiIsInN1YiI6IlBUT3NvY1BMRXg5Sk9NajZhQ1VfSnFnLXo5a3o2TGZNNExiUnBPSFllZVEiLCJ0aWQiOiIwYmU2YTU5My0wZWZjLTRkYWQtOWUxYi00YTFhNjg5ZmUwNmQiLCJ1bmlxdWVfbmFtZSI6ImdyZGVnckBncmRlZ3Iub25taWNyb3NvZnQuY29tIiwidXBuIjoiZ3JkZWdyQGdyZGVnci5vbm1pY3Jvc29mdC5jb20iLCJ1dGkiOiItQjlvVlpYRFBVYUJGRzRfYTU4QkFBIiwidmVyIjoiMS4wIiwid2lkcyI6WyI2MmU5MDM5NC02OWY1LTQyMzctOTE5MC0wMTIxNzcxNDVlMTAiXX0.gN52mkqpYr1NvpoyJHAy7iqJBWRtqhE_ssScH1uN5mFSWMmppcfm6f3EDWTovMOhMUELsa6xs9DQL0GUyVipGs_M1PLqK-eYAggGhHRnixWRb3lN-edIpnmIFzyV7WTkgZPWTaWLcMXrUWv6VipfOdG4PY4_hJaHbU6LzCZMoEIUCWLKeGHfyHjE75jzhlud4JD4gcIIoapAxFFIw-RHpScoE6mDjbFl6SkiEC6kTOC83uG6U89LKIvagLpylip7WwdnI0wBU-lQqBwiB20nT27sUkDQs1A8f1dn59z1dte17Csu9pkgzB7pAwjK3qpZfwAoD0HnRGbGHz1EqvTyhA")
-                    .addHeader("User-Agent", "PostmanRuntime/7.11.0")
-                    .addHeader("Accept", "*/*")
-                    .addHeader("Host", "msott.api.crm.dynamics.com")
-                    .addHeader("cookie", "ReqClientId=0714ca0f-c076-47b2-9d8b-da21b998c237; orgId=08907b95-ee84-4861-b141-b584fecc774d; ApplicationGatewayAffinity=6de03282df58752ccb0f9388c62aad0cbb901a3326f273c00b18e60c62d78474")
-                    .addHeader("accept-encoding", "gzip, deflate")
-                    .addHeader("content-length", "1242")
-                    .addHeader("Connection", "keep-alive")
-                    .addHeader("cache-control", "no-cache")
-                    .addHeader("Postman-Token", "5d301ceb-0583-40c2-985a-acdec0b9ebe0")
+                    .url(REST_API_URL + "EntityDefinitions%28LogicalName=%27" + entityLogicalname +
+                            "%27%29/Attributes/Microsoft.Dynamics.CRM.PicklistAttributeMetadata" +
+                            "?$select=LogicalName&$filter=LogicalName%20eq%20%27" + optionSetLogicalName +
+                            "%27&$expand=OptionSet")
+                    .get()
+                    .addHeader("Authorization", "Bearer " + accessToken)
                     .build();
 
             Response response = client.newCall(request).execute();
             String dataReturnedFromGetOptions = response.body().string();
 
-            JSONObject json = new JSONObject(dataReturnedFromGetOptions);
-            JSONArray jsonArray = (JSONArray) json.get("value");
-            JSONObject jsonObject = (JSONObject) jsonArray.get(jsonArray.length() - 1);
-            previousValue = jsonObject.getInt("Value");
+            JSONObject odataResponse = new JSONObject(dataReturnedFromGetOptions);
+            JSONArray optionsetMetadataArray = (JSONArray) odataResponse.get("value");
+            JSONObject optionsetMetadataObject = (JSONObject) optionsetMetadataArray.get(0);
+            JSONObject optionSet = optionsetMetadataObject.getJSONObject("OptionSet");
+            JSONArray optionSetOptions = (JSONArray) optionSet.get("Options");
+            JSONObject option = (JSONObject) optionSetOptions.get(optionSetOptions.length() - 1);
+            previousValue = option.getInt("Value");
+
+            System.out.println("End");
         }
         catch (IOException e) { }
 
-        String optionSetName = "new_msdatzooptionset";
-        String value = Integer.toString(++previousValue);
-        String label = "newOptionLabel";
-        String metadataId = "06d1a507-4d57-e911-a82a-000d3a1d5203";
+        String optionValue = Integer.toString(++previousValue);
+        String optionLabel = "newOptionLabel";
+        String optionSetMetadataId = "06d1a507-4d57-e911-a82a-000d3a1d5203";
 
         try {
             OkHttpClient client = new OkHttpClient();
 
             MediaType mediaType = MediaType.parse("application/json");
-            RequestBody body = RequestBody.create(mediaType, "{\r\n    \"AttributeLogicalName\": \"new_localoptionsettoform\",\r\n    \"EntityLogicalName\": \"cr965_testcdsentity\",\r\n    \"Value\": \"100000002\",\r\n    \"Label\": {\r\n        \"LocalizedLabels\": [\r\n            {\r\n                \"Label\": \"nerd\",\r\n                \"LanguageCode\": 1033,\r\n                \"IsManaged\": false,\r\n                \"MetadataId\": \"881daca2-5c68-e911-a825-000d3a1d501d\",\r\n                \"HasChanged\": null\r\n            }\r\n        ],\r\n        \"UserLocalizedLabel\": {\r\n            \"Label\": \"nerd\",\r\n            \"LanguageCode\": 1033,\r\n            \"IsManaged\": false,\r\n            \"MetadataId\": \"881daca2-5c68-e911-a825-000d3a1d501d\",\r\n            \"HasChanged\": null\r\n        }\r\n    },\r\n    \"Description\": {\r\n        \"LocalizedLabels\": [\r\n            {\r\n                \"Label\": \"\",\r\n                \"LanguageCode\": 1033,\r\n                \"IsManaged\": false,\r\n                \"MetadataId\": \"881daca2-5c68-e911-a825-000d3a1d501d\",\r\n                \"HasChanged\": null\r\n            }\r\n        ],\r\n        \"UserLocalizedLabel\": {\r\n            \"Label\": \"\",\r\n            \"LanguageCode\": 1033,\r\n            \"IsManaged\": false,\r\n            \"MetadataId\": \"881daca2-5c68-e911-a825-000d3a1d501d\",\r\n            \"HasChanged\": null\r\n        }\r\n    }\r\n}");
+            RequestBody body = RequestBody.create(mediaType, "{\r\n" +
+                "\"AttributeLogicalName\": \"" + optionSetLogicalName + "\",\r\n" +
+                "\"EntityLogicalName\": \"" + entityLogicalname + "\",\r\n" +
+                "\"Value\": \"" + optionValue + "\",\r\n" +
+                "\"Label\": {\r\n" +
+                    "\"LocalizedLabels\": [\r\n" +
+                        "{\r\n" +
+                            "\"Label\": \"" + optionLabel + "\",\r\n" +
+                            "\"LanguageCode\": 1033,\r\n" +
+                            "\"IsManaged\": false,\r\n" +
+                            "\"MetadataId\": \"881daca2-5c68-e911-a825-000d3a1d501d\",\r\n" +
+                            "\"HasChanged\": null\r\n" +
+                        "}\r\n" +
+                    "],\r\n" +
+                    "\"UserLocalizedLabel\": {\r\n" +
+                        "\"Label\": \"" + optionLabel + "\",\r\n" +
+                        "\"LanguageCode\": 1033,\r\n" +
+                        "\"IsManaged\": false,\r\n" +
+                        "\"MetadataId\": \"881daca2-5c68-e911-a825-000d3a1d501d\",\r\n" +
+                        "\"HasChanged\": null\r\n" +
+                    "}\r\n" +
+                "},\r\n" +
+                "\"Description\": {\r\n" +
+                    "\"LocalizedLabels\": [\r\n" +
+                        "{\r\n" +
+                            "\"Label\": \"\",\r\n" +
+                            "\"LanguageCode\": 1033,\r\n" +
+                            "\"IsManaged\": false,\r\n" +
+                            "\"MetadataId\": \"881daca2-5c68-e911-a825-000d3a1d501d\",\r\n" +
+                            "\"HasChanged\": null\r\n" +
+                        "}\r\n" +
+                    "],\r\n" +
+                    "\"UserLocalizedLabel\": {\r\n" +
+                        "\"Label\": \"\",\r\n" +
+                        "\"LanguageCode\": 1033,\r\n" +
+                        "\"IsManaged\": false,\r\n" +
+                        "\"MetadataId\": \"881daca2-5c68-e911-a825-000d3a1d501d\",\r\n" +
+                        "\"HasChanged\": null\r\n" +
+                    "}\r\n" +
+                "}\r\n" +
+            "}");
+
             Request request = new Request.Builder()
-                    .url("https://msott.api.crm.dynamics.com/api/data/v9.0/InsertOptionValue")
+                    .url(REST_API_URL + "InsertOptionValue")
                     .post(body)
                     .addHeader("Content-Type", "application/json")
-                    .addHeader("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IkhCeGw5bUFlNmd4YXZDa2NvT1UyVEhzRE5hMCIsImtpZCI6IkhCeGw5bUFlNmd4YXZDa2NvT1UyVEhzRE5hMCJ9.eyJhdWQiOiJodHRwczovL21zb3R0LmFwaS5jcm0uZHluYW1pY3MuY29tLyIsImlzcyI6Imh0dHBzOi8vc3RzLndpbmRvd3MubmV0LzBiZTZhNTkzLTBlZmMtNGRhZC05ZTFiLTRhMWE2ODlmZTA2ZC8iLCJpYXQiOjE1NTYzMjk3NzksIm5iZiI6MTU1NjMyOTc3OSwiZXhwIjoxNTU2MzMzNjc5LCJhY3IiOiIxIiwiYWlvIjoiQVNRQTIvOExBQUFBd3d0eW45U2VyUHROVGFKZXFwR1VwVU5QVG1xOEVhbDgrNjlhdFlCU21DQT0iLCJhbXIiOlsicHdkIl0sImFwcGlkIjoiNGQxNzQyYTEtOGMzZi00OTEwLThlOTAtYzQ0MjQyZmFhODYwIiwiYXBwaWRhY3IiOiIxIiwiZmFtaWx5X25hbWUiOiJEZWdydXkiLCJnaXZlbl9uYW1lIjoiR3JlZyIsImlwYWRkciI6IjczLjI1Mi4yMDMuMTYiLCJuYW1lIjoiR3JlZyBEZWdydXkiLCJvaWQiOiIyZjNlYWE0Ny1mZTdmLTQ1MGYtOTdkZS0wMGEwM2JhMGY5YzUiLCJwdWlkIjoiMTAwMzAwMDBBNDhEMzJBMSIsInNjcCI6InVzZXJfaW1wZXJzb25hdGlvbiIsInN1YiI6IlBUT3NvY1BMRXg5Sk9NajZhQ1VfSnFnLXo5a3o2TGZNNExiUnBPSFllZVEiLCJ0aWQiOiIwYmU2YTU5My0wZWZjLTRkYWQtOWUxYi00YTFhNjg5ZmUwNmQiLCJ1bmlxdWVfbmFtZSI6ImdyZGVnckBncmRlZ3Iub25taWNyb3NvZnQuY29tIiwidXBuIjoiZ3JkZWdyQGdyZGVnci5vbm1pY3Jvc29mdC5jb20iLCJ1dGkiOiItQjlvVlpYRFBVYUJGRzRfYTU4QkFBIiwidmVyIjoiMS4wIiwid2lkcyI6WyI2MmU5MDM5NC02OWY1LTQyMzctOTE5MC0wMTIxNzcxNDVlMTAiXX0.gN52mkqpYr1NvpoyJHAy7iqJBWRtqhE_ssScH1uN5mFSWMmppcfm6f3EDWTovMOhMUELsa6xs9DQL0GUyVipGs_M1PLqK-eYAggGhHRnixWRb3lN-edIpnmIFzyV7WTkgZPWTaWLcMXrUWv6VipfOdG4PY4_hJaHbU6LzCZMoEIUCWLKeGHfyHjE75jzhlud4JD4gcIIoapAxFFIw-RHpScoE6mDjbFl6SkiEC6kTOC83uG6U89LKIvagLpylip7WwdnI0wBU-lQqBwiB20nT27sUkDQs1A8f1dn59z1dte17Csu9pkgzB7pAwjK3qpZfwAoD0HnRGbGHz1EqvTyhA")
-                    .addHeader("User-Agent", "PostmanRuntime/7.11.0")
-                    .addHeader("Accept", "*/*")
-                    .addHeader("Host", "msott.api.crm.dynamics.com")
-                    .addHeader("cookie", "ReqClientId=0714ca0f-c076-47b2-9d8b-da21b998c237; orgId=08907b95-ee84-4861-b141-b584fecc774d; ApplicationGatewayAffinity=6de03282df58752ccb0f9388c62aad0cbb901a3326f273c00b18e60c62d78474")
-                    .addHeader("accept-encoding", "gzip, deflate")
-                    .addHeader("content-length", "1242")
-                    .addHeader("Connection", "keep-alive")
-                    .addHeader("cache-control", "no-cache")
-                    .addHeader("Postman-Token", "e3704b40-f82b-4846-9b93-42de426ee4a3")
+                    .addHeader("Authorization", "Bearer "+ accessToken)
                     .build();
 
             Response response = client.newCall(request).execute();
