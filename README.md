@@ -1,36 +1,13 @@
-{
-    "OptionSetName": "new_msdatzooptionset",
-    "Description": {
-        "LocalizedLabels": [{
-            "LanguageCode": 1033,
-            "MetadataId": "{metadataId}",
-            "Label": "",
-            "IsManaged": false,
-            "HasChanged": null
-        }],
-        "UserLocalizedLabel": {
-            "LanguageCode": 1033,
-            "MetadataId": "{metadataId}",
-            "Label": "{label}",
-            "IsManaged": false,
-            "HasChanged": null
-        }
-    },
-    "Value": "100000002",
-    "Label": {
-        "LocalizedLabels": [{
-            "LanguageCode": 1033,
-            "MetadataId": "06d1a507-4d57-e911-a82a-000d3a1d5203",
-            "Label": "newOptionLabel",
-            "IsManaged": false,
-            "HasChanged": null
-        }],
-        "UserLocalizedLabel": {
-            "LanguageCode": 1033,
-            "MetadataId": "06d1a507-4d57-e911-a82a-000d3a1d5203",
-            "Label": "newOptionLabel",
-            "IsManaged": false,
-            "HasChanged": null
-        }
-    }
-}
+<div align="center"><img src="img/pupadoo.svg"></div>
+
+# Dynamics REST APIs in Java
+
+Dynamics 365 REST API in Java. Data Access Object controls it all.
+
+# Setup
+
+Create an [Application user in Dynamics 365](https://docs.microsoft.com/en-us/power-platform/admin/create-users-assign-online-security-roles#create-an-application-user) for Multitenant Account type.
+Create an Azure AD Application, with AAD Graph `User.Read` & Dynamics CRM `user_impersonation`, and generate a client secret.
+
+# References
+- [Icons](https://graphicburger.com/200-windows-10-icons/)
