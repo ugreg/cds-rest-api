@@ -25,8 +25,7 @@ public class Main {
         MicrosoftDynamicsDao microsoftDynamicsDao = MicrosoftDynamicsDao.getInstance();
 
         try {
-            microsoftDynamicsDao.addGlobalOptionSetValuesDynamically();
-            // microsoftDynamicsDao.addLocalOptionSetValuesDynamically();
+            microsoftDynamicsDao.postLocalOptionSetValuesDynamically();
             // TODO: 2
             // createEmailWithPartyList(accessToken);
             // TODO: 3

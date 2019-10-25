@@ -64,9 +64,10 @@ public class MicrosoftDynamicsDao {
 
     /**
      * View all Global Option Sets
+     * Should work on v9.1 needs testing
      * https://msott.api.crm.dynamics.com/api/data/v9.0/GlobalOptionSetDefinitions(06d1a507-4d57-e911-a82a-000d3a1d5203)/Microsoft.Dynamics.CRM.OptionSetMetadata?$select=Options
      */
-    public void addGlobalOptionSetValuesDynamically()
+    public void postGlobalOptionSetValuesDynamically()
             throws MalformedURLException, InterruptedException, ExecutionException {
         int previousValue = 0;
         String optionSetGuidString = "06d1a507-4d57-e911-a82a-000d3a1d5203";
@@ -101,7 +102,7 @@ public class MicrosoftDynamicsDao {
             OkHttpClient client = new OkHttpClient();
             MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
             File file = new File(
-                    getClass().getClassLoader().getResource("optionset.json").getFile()
+                    getClass().getClassLoader().getResource("global-optionset.json").getFile()
             );
             JSONTokener jt = new JSONTokener(new FileReader(file.getPath()));
             JSONObject jo = new JSONObject(jt);
@@ -135,7 +136,12 @@ public class MicrosoftDynamicsDao {
         catch (IOException e) { }
     }
 
-    public void addLocalOptionSetValuesDynamically()
+    /**
+     * View this optionset
+     * https://msott.crm.dynamics.com/api/data/v9.1/EntityDefinitions(LogicalName='cr965_testcdsentity')/Attributes/Microsoft.Dynamics.CRM.PicklistAttributeMetadata?$select=LogicalName&$filter=LogicalName%20eq%20%27new_localoptionsettoform%27&$expand=OptionSet
+     * POST value to an option set field of an entity in a Solution
+     */
+    public void postLocalOptionSetValuesDynamically()
             throws MalformedURLException, InterruptedException, ExecutionException {
         int previousValue = 0;
         String entityLogicalname = "cr965_testcdsentity";
@@ -157,66 +163,38 @@ public class MicrosoftDynamicsDao {
             String dataReturnedFromGetOptions = response.body().string();
 
             JSONObject odataResponse = new JSONObject(dataReturnedFromGetOptions);
-            JSONArray optionsetMetadataArray = (JSONArray) odataResponse.get("value");
-            JSONObject optionsetMetadataObject = (JSONObject) optionsetMetadataArray.get(0);
-            JSONObject optionSet = optionsetMetadataObject.getJSONObject("OptionSet");
-            JSONArray optionSetOptions = (JSONArray) optionSet.get("Options");
-            JSONObject option = (JSONObject) optionSetOptions.get(optionSetOptions.length() - 1);
-            previousValue = option.getInt("Value");
-
-            System.out.println("End");
+            JSONArray optionsArray =  odataResponse
+                    .getJSONArray("value")
+                    .getJSONObject(0)
+                    .getJSONObject("OptionSet")
+                    .getJSONArray("Options");
+            previousValue = optionsArray
+                    .getJSONObject(optionsArray.length() - 1)
+                    .getInt("Value");
         }
         catch (IOException e) { }
 
         String optionValue = Integer.toString(++previousValue);
-        String optionLabel = "newOptionLabel";
-        String optionSetMetadataId = "06d1a507-4d57-e911-a82a-000d3a1d5203";
+        String optionLabel = "SuperNewOption";
 
         try {
             OkHttpClient client = new OkHttpClient();
 
+            File file = new File(
+                    getClass().getClassLoader().getResource("local-optionset.json").getFile()
+            );
+            JSONTokener jt = new JSONTokener(new FileReader(file.getPath()));
+            JSONObject jo = new JSONObject(jt);
+            jo.put("AttributeLogicalName", optionSetLogicalName);
+            jo.put("EntityLogicalName", entityLogicalname);
+            jo.put("Value", optionValue);
+            jo.getJSONObject("Label").getJSONArray("LocalizedLabels").getJSONObject(0).put("Label", optionLabel);
+            jo.getJSONObject("Label").getJSONObject("UserLocalizedLabel").put("Label", optionLabel);
+
+            String content = jo.toString();
+
             MediaType mediaType = MediaType.parse("application/json");
-            RequestBody body = RequestBody.create(mediaType, "{\r\n" +
-                    "\"AttributeLogicalName\": \"" + optionSetLogicalName + "\",\r\n" +
-                    "\"EntityLogicalName\": \"" + entityLogicalname + "\",\r\n" +
-                    "\"Value\": \"" + optionValue + "\",\r\n" +
-                    "\"Label\": {\r\n" +
-                    "\"LocalizedLabels\": [\r\n" +
-                    "{\r\n" +
-                    "\"Label\": \"" + optionLabel + "\",\r\n" +
-                    "\"LanguageCode\": 1033,\r\n" +
-                    "\"IsManaged\": false,\r\n" +
-                    "\"MetadataId\": \"881daca2-5c68-e911-a825-000d3a1d501d\",\r\n" +
-                    "\"HasChanged\": null\r\n" +
-                    "}\r\n" +
-                    "],\r\n" +
-                    "\"UserLocalizedLabel\": {\r\n" +
-                    "\"Label\": \"" + optionLabel + "\",\r\n" +
-                    "\"LanguageCode\": 1033,\r\n" +
-                    "\"IsManaged\": false,\r\n" +
-                    "\"MetadataId\": \"881daca2-5c68-e911-a825-000d3a1d501d\",\r\n" +
-                    "\"HasChanged\": null\r\n" +
-                    "}\r\n" +
-                    "},\r\n" +
-                    "\"Description\": {\r\n" +
-                    "\"LocalizedLabels\": [\r\n" +
-                    "{\r\n" +
-                    "\"Label\": \"\",\r\n" +
-                    "\"LanguageCode\": 1033,\r\n" +
-                    "\"IsManaged\": false,\r\n" +
-                    "\"MetadataId\": \"881daca2-5c68-e911-a825-000d3a1d501d\",\r\n" +
-                    "\"HasChanged\": null\r\n" +
-                    "}\r\n" +
-                    "],\r\n" +
-                    "\"UserLocalizedLabel\": {\r\n" +
-                    "\"Label\": \"\",\r\n" +
-                    "\"LanguageCode\": 1033,\r\n" +
-                    "\"IsManaged\": false,\r\n" +
-                    "\"MetadataId\": \"881daca2-5c68-e911-a825-000d3a1d501d\",\r\n" +
-                    "\"HasChanged\": null\r\n" +
-                    "}\r\n" +
-                    "}\r\n" +
-                    "}");
+            RequestBody body = RequestBody.create(mediaType, content);
 
             Request request = new Request.Builder()
                     .url(REST_API_URL + "InsertOptionValue")

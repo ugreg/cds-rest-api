@@ -1,0 +1,23 @@
+{
+  "AttributeLogicalName": "ATTRIBUTE_LOGICAL_NAME",
+  "EntityLogicalName": "ENTITY_LOGICAL_NAME",
+  "Value": "VALUE",
+  "Label": {
+    "LocalizedLabels": [
+      {
+        "Label": "LABEL",
+        "LanguageCode": 1033,
+        "IsManaged": false
+      }
+    ],
+    "UserLocalizedLabel": {
+      "Label": "LABEL",
+      "LanguageCode": 1033,
+      "IsManaged": false
+    }
+  },
+  "Description": {
+    "LocalizedLabels": [],
+    "UserLocalizedLabel": null
+  }
+}
