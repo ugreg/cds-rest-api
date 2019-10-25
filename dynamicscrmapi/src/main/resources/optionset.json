@@ -1,0 +1,40 @@
+{
+  "OptionSetName": "{OPTIONSET_NAME}",
+  "Value": "{VALUE}",
+  "Label": {
+    "LocalizedLabels": [
+      {
+        "Label": "{LABEL}",
+        "LanguageCode": 1033,
+        "IsManaged": false,
+        "MetadataId": "{METADATA_ID}",
+        "HasChanged": null
+      }
+    ],
+    "UserLocalizedLabel": {
+      "Label": "{LABEL}",
+      "LanguageCode": 1033,
+      "IsManaged": false,
+      "MetadataId": "{METADATA_ID}",
+      "HasChanged": null
+      }
+  },
+  "Description": {
+    "LocalizedLabels": [
+      {
+        "Label": "",
+        "LanguageCode": 1033,
+        "IsManaged": false,
+        "MetadataId": "{METADATA_ID}",
+        "HasChanged": null
+      }
+    ],
+    "UserLocalizedLabel": {
+      "Label": "{LABEL}",
+      "LanguageCode": 1033,
+      "IsManaged": false,
+      "MetadataId": "{METADATA_ID}",
+      "HasChanged": null
+    }
+  }
+}
