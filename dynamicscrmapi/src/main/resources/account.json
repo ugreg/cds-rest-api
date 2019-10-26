@@ -1,0 +1,7 @@
+{
+  "name": "Sample Java Account 1",
+  "address1_latitude": 35.617728,
+  "address1_longitude": 139.776136,
+  "description": "Description of the account.",
+  "revenue": 5000000
+}

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -23,8 +24,9 @@ public class MicrosoftDynamicsDao {
 
     private static final String AUTHORITY = "https://login.microsoftonline.com/";
     String RESOURCE = "https://msott.crm.dynamics.com";
+    String RESOURCE_API = "https://msott.api.crm.dynamics.com";
     String VERSION = "v9.0";
-    String REST_API_URL = RESOURCE + "/api/data/" + VERSION + "/";
+    String REST_API_URL = RESOURCE_API + "/api/data/" + VERSION + "/";
     String clientId = "64f4cba8-0656-4ccd-8c2a-fd269fe7636f";
     String clientSecret = "";
     String tenantID = "grdegr.onmicrosoft.com";
@@ -35,7 +37,7 @@ public class MicrosoftDynamicsDao {
     }
 
     public static MicrosoftDynamicsDao getInstance() {
-        if(microsoftDynamicsDaoInstance == null) {
+        if (microsoftDynamicsDaoInstance == null) {
             microsoftDynamicsDaoInstance = new MicrosoftDynamicsDao();
         }
         return microsoftDynamicsDaoInstance;
@@ -50,14 +52,11 @@ public class MicrosoftDynamicsDao {
 
             result = future.get();
             accessToken = result.getAccessToken();
-        }
-        catch (MalformedURLException e) {
+        } catch (MalformedURLException e) {
             System.out.println("MalformedURLException ");
-        }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             System.out.println("InterruptedException ");
-        }
-        catch (ExecutionException e) {
+        } catch (ExecutionException e) {
             System.out.println("ExecutionException, have you provided the correct client id and secret pair? ");
         }
     }
@@ -90,8 +89,8 @@ public class MicrosoftDynamicsDao {
             JSONArray jsonArray = (JSONArray) json.get("value");
             JSONObject jsonObject = (JSONObject) jsonArray.get(jsonArray.length() - 1);
             previousValue = jsonObject.getInt("Value");
+        } catch (IOException e) {
         }
-        catch (IOException e) { }
 
         String optionSetName = "new_msdatzooptionset";
         String value = Integer.toString(++previousValue);
@@ -132,8 +131,8 @@ public class MicrosoftDynamicsDao {
             Response response = client.newCall(request).execute();
 
             System.out.println("End");
+        } catch (IOException e) {
         }
-        catch (IOException e) { }
     }
 
     /**
@@ -163,7 +162,7 @@ public class MicrosoftDynamicsDao {
             String dataReturnedFromGetOptions = response.body().string();
 
             JSONObject odataResponse = new JSONObject(dataReturnedFromGetOptions);
-            JSONArray optionsArray =  odataResponse
+            JSONArray optionsArray = odataResponse
                     .getJSONArray("value")
                     .getJSONObject(0)
                     .getJSONObject("OptionSet")
@@ -171,8 +170,8 @@ public class MicrosoftDynamicsDao {
             previousValue = optionsArray
                     .getJSONObject(optionsArray.length() - 1)
                     .getInt("Value");
+        } catch (IOException e) {
         }
-        catch (IOException e) { }
 
         String optionValue = Integer.toString(++previousValue);
         String optionLabel = "SuperNewOption";
@@ -200,123 +199,144 @@ public class MicrosoftDynamicsDao {
                     .url(REST_API_URL + "InsertOptionValue")
                     .post(body)
                     .addHeader("Content-Type", "application/json")
-                    .addHeader("Authorization", "Bearer "+ accessToken)
+                    .addHeader("Authorization", "Bearer " + accessToken)
                     .build();
 
             Response response = client.newCall(request).execute();
 
             System.out.println("End");
+        } catch (IOException e) {
         }
-        catch (IOException e) { }
     }
 
-    //    // TODO: 2
-//    public static void postEmailWithPartyList(String accessToken) {
-//        try {
-//            OkHttpClient client = new OkHttpClient();
-//
-//            String accountId = "da084227-2f4b-e911-a830-000d3a1d5a4d";
-//
-//            Request request = new Request.Builder()
-//                    .url(REST_API_URL + "accounts" +
-//                            "%28" + accountId + "%29/contact_customer_accounts")
-//                    .get()
-//                    .addHeader("Authorization", "Bearer " + accessToken)
-//                    .build();
-//
-//            Response response = client.newCall(request).execute();
-//            String dataReturnedFromGetOptions = response.body().string();
-//
-//            JSONObject json = new JSONObject(dataReturnedFromGetOptions);
-//            JSONArray jsonArray = (JSONArray) json.get("value");
-//            Queue<String> contactIds = new LinkedList<String>();
-//            for(int i=0; i < jsonArray.length(); i++) {
-//                JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-//                contactIds.add(jsonObject.getString("contactid"));
-//            }
-//
-//            final int SENDER_PARTICIPATION_TYPE_MASK = 1;
-//            final int TO_PARTICIPATION_TYPE_MASK = 2;
-//            final int CC_PARTICIPATION_TYPE_MASK = 3;
-//            final int BCC_PARTICIPATION_TYPE_MASK = 4;
-//            String senderId = "96b856f4-134c-e911-a823-000d3a1d5de8";
-//            MediaType mediaType = MediaType.parse("application/json");
-//            String contacts = "";
-//            for(String id : contactIds){
-//                contacts += ",{\"partyid_contact@odata.bind\": \"/contacts(" + id + ")\"," +
-//                        "\"participationtypemask\": " + TO_PARTICIPATION_TYPE_MASK + "}";
-//            }
-//            String requestBodyContent = "{" +
-//                        "\"email_activity_parties\": " +
-//                        "[" +
-//                            "{" +
-//                                "\"partyid_systemuser@odata.bind\": \"/systemusers(" + senderId +")\"," +
-//                                "\"participationtypemask\": " + SENDER_PARTICIPATION_TYPE_MASK +
-//                            "}" + contacts +
-//                        "]" +
-//                    "}";
-//            RequestBody body = RequestBody.create(mediaType, requestBodyContent);
-//            request = new Request.Builder()
-//                    .url(REST_API_URL + "emails")
-//                    .post(body)
-//                    .addHeader("Content-Type", "application/json")
-//                    .addHeader("Authorization", "Bearer " + accessToken)
-//                    .build();
-//
-//            response = client.newCall(request).execute();
-//
-//            System.out.println();
-//        }
-//        catch(IOException e) {}
-//    }
+    /**
+     * Sends an email to all Account Contacts
+     * Displays in Entity Timeline
+     * https://msott.api.crm.dynamics.com/api/data/v9.0/emails
+     */
+    public void postEmailWithPartyList() throws MalformedURLException, InterruptedException, ExecutionException {
+        try {
+            OkHttpClient client = new OkHttpClient();
 
-//    // TODO: 3
-//    public static void getEntityAuditHistory(String accessToken) {
-//        class DynamicsEntityAudit {
-//            private String mChangeDate; // createdon
-//            private String mChangedBy; // _userid_value
-//            private String mEvent; // action
-//            private String mChangedField; // attributemask
-//            private String mOldValue;
-//            private String mNewValue;
-//            DynamicsEntityAudit(String changeDate, String changedBy, String event,
-//                String changedField, String oldValue, String newValue) {
-//                    mChangeDate = changeDate;
-//                    mChangedBy = changedBy;
-//                    mEvent = event;
-//                    mChangedField = changedField;
-//                    mOldValue = oldValue;
-//                    mNewValue = newValue;
-//            }
-//            public String getmChangeDate() {
-//                return mChangeDate;
-//            }
-//            public String getmChangedBy() {
-//                return mChangedBy;
-//            }
-//            public String getmEvent() {
-//                return mEvent;
-//            }
-//            public String getmChangedField() {
-//                return mChangedField;
-//            }
-//            public String getmOldValue() {
-//                return mOldValue;
-//            }
-//            public String getmNewValue() {
-//                return mNewValue;
-//            }
-//        }
-//
-//        String accountId = "da084227-2f4b-e911-a830-000d3a1d5a4d";
-//
-//        List<DynamicsEntityAudit> dynamicsEntityAudits = new ArrayList<DynamicsEntityAudit>();
-//
-////        try {
-////            System.out.println("end");
-////        }
-////        catch (IOException e) {}
-//    }
+            String accountId = "da084227-2f4b-e911-a830-000d3a1d5a4d";
+            Request request = new Request.Builder()
+                    .url(REST_API_URL + "accounts" + "%28" +
+                            accountId + "%29/contact_customer_accounts")
+                    .get()
+                    .addHeader("Authorization", "Bearer " + accessToken)
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            String contactsResponse = response.body().string();
+
+            JSONObject contactsResponseJson = new JSONObject(contactsResponse);
+            JSONArray contactsJsonArray = contactsResponseJson.getJSONArray("value");
+            Queue<String> contactIds = new LinkedList<String>();
+            for (Object o : contactsJsonArray) {
+                JSONObject contact = (JSONObject) o;
+                contactIds.add(contact.getString("contactid"));
+            }
+
+            final int SENDER_PARTICIPATION_TYPE_MASK = 1;
+            final int TO_PARTICIPATION_TYPE_MASK = 2;
+            final int CC_PARTICIPATION_TYPE_MASK = 3;
+            final int BCC_PARTICIPATION_TYPE_MASK = 4;
+            String systemuserId = "96b856f4-134c-e911-a823-000d3a1d5de8";
+            String senderId = systemuserId;
+
+            MediaType mediaType = MediaType.parse("application/json");
+            Stack<JSONObject> stack = new Stack<JSONObject>();
+            JSONObject contact;
+            for (String id : contactIds) {
+                contact = new JSONObject();
+                contact.put("partyid_contact@odata.bind", "/contacts(" + id + ')');
+                contact.put("participationtypemask", TO_PARTICIPATION_TYPE_MASK);
+                stack.push(contact);
+            }
+
+            File f = new File(
+                    getClass().getClassLoader().getResource("email-activity-party.json").getFile()
+            );
+            FileReader fr = new FileReader(f);
+            char[] letters = new char[(int) f.length()];
+            fr.read(letters);
+            fr.close();
+            String content = new String(letters);
+            JSONTokener jt = new JSONTokener(new FileReader(f.getPath()));
+            JSONObject jo = new JSONObject(jt);
+
+            while (!stack.empty()) {
+                jo.getJSONArray("email_activity_parties").put(stack.pop());
+            }
+
+            content = jo.toString();
+            content = content.replace("SYSTEM_USER_ID", senderId);
+
+            mediaType = MediaType.parse("application/json");
+            RequestBody body = RequestBody.create(mediaType, content);
+            request = new Request.Builder()
+                    .url(REST_API_URL + "emails")
+                    .post(body)
+                    .addHeader("Content-Type", "application/json")
+                    .addHeader("Authorization", "Bearer " + accessToken)
+                    .addHeader("Accept", "*/*")
+                    .addHeader("Host", "msott.api.crm.dynamics.com")
+                    .addHeader("Accept-Encoding", "gzip, deflate")
+                    .build();
+
+            response = client.newCall(request).execute();
+
+            System.out.println("End");
+        } catch (IOException e) {
+        }
+    }
+
+    /**
+     * Get audit history for an entiy
+     * https://msott.api.crm.dynamics.com/api/data/v9.0/RetrieveRecordChangeHistory(Target=@tid, PagingInfo=@pi)?@tid={'@odata.id':'accounts(da084227-2f4b-e911-a830-000d3a1d5a4d)'}&@pi=null
+     *
+     * @code AuditDetails collects all audits, most recent change to entity is in front
+     */
+    public void getEntityAuditHistory()
+            throws MalformedURLException, InterruptedException, ExecutionException {
+
+        try {
+            OkHttpClient client = new OkHttpClient();
+            String accountId = "da084227-2f4b-e911-a830-000d3a1d5a4d";
+            Request request = new Request.Builder()
+                    .url(REST_API_URL + "RetrieveRecordChangeHistory%28" +
+                            "Target=@tid,%20" +
+                            "PagingInfo=@pi%29?" +
+                            "@tid={%27@odata.id%27:%27accounts%28" + accountId + "%29%27}&" +
+                            "@pi=null")
+                    .get()
+                    .addHeader("Authorization", "Bearer " + accessToken)
+                    .addHeader("Accept", "*/*")
+                    .addHeader("cache-control", "no-cache")
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            String responseString = response.body().string();
+
+            JSONObject odataResponse = new JSONObject(responseString);
+
+            JSONArray auditDetails = odataResponse.getJSONObject("AuditDetailCollection").getJSONArray("AuditDetails");
+            auditDetails.length();
+
+            Queue<JSONObject> auditHistory = new LinkedList<JSONObject>();
+            for (Object o : auditDetails) {
+                JSONObject jo = (JSONObject) o;
+                auditHistory.add(jo);
+            }
+
+            String anOldValue = auditHistory.peek().getJSONObject("OldValue").toString();
+            String aNewValue = auditHistory.peek().getJSONObject("NewValue").toString();
+            System.out.println("Old value " + anOldValue);
+            System.out.println("New value " + aNewValue);
+            System.out.println("end");
+        } catch (IOException e) {
+        }
+    }
 
     /**
      * https://msott.api.crm.dynamics.com/api/data/v9.0/accounts(da084227-2f4b-e911-a830-000d3a1d5a4d)/Account_CustomerAddress
@@ -338,44 +358,47 @@ public class MicrosoftDynamicsDao {
             Response response = client.newCall(request).execute();
             String dataReturnedFromGetAddresses = response.body().string();
             System.out.println("end");
+        } catch (IOException e) {
         }
-        catch (IOException e) {}
     }
 
-//    // TODO: 5
-//    public static void createWithDataReturned(String accessToken) {
-//        try {
-//            OkHttpClient client = new OkHttpClient();
-//
-//            MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
-//            RequestBody body = RequestBody.create(mediaType, "{" +
-//                    "\"name\": \"Sample Postman Account\"," +
-//                    "\"creditonhold\": false," +
-//                    "\"address1_latitude\": 47.639583," +
-//                    "\"description\": \"This is the description of the sample account\"," +
-//                    "\"revenue\": 5000000," +
-//                    "\"accountcategorycode\": 1" +
-//                    "}");
-//            Request request = new Request.Builder()
-//                    .url("https://msott.api.crm.dynamics.com/api/data/v9.0/accounts" +
-//                            "?$select=name,creditonhold,address1_latitude,description,revenue,accountcategorycode,createdon")
-//                    .post(body)
-//                    .addHeader("OData-MaxVersion", "4.0")
-//                    .addHeader("OData-Version", "4.0")
-//                    .addHeader("Accept", "application/json")
-//                    .addHeader("Content-Type", "application/json; charset=utf-8")
-//                    .addHeader("Prefer", "return=representation")
-//                    .addHeader("Authorization", "Bearer " + accessToken)
-//                    .build();
-//
-//            Response response = client.newCall(request).execute();
-//
-//            String dataReturnedFromCreate = response.body().string();
-//
-//            System.out.println(dataReturnedFromCreate);
-//        }
-//        catch (IOException e) { }
-//    }
+    /**
+     * https://msott.api.crm.dynamics.com/api/data/v9.0/accounts?$select=name,address1_latitude,address1_longitude,description,revenue,createdon
+     */
+    public void postWithDataReturned() throws MalformedURLException, InterruptedException, ExecutionException {
+        try {
+            OkHttpClient client = new OkHttpClient();
+
+            File f = new File(
+                    getClass().getClassLoader().getResource("account.json").getFile()
+            );
+            FileReader fr = new FileReader(f);
+            char[] letters = new char[(int) f.length()];
+            fr.read(letters);
+            fr.close();
+            String content = new String(letters);
+
+            MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
+            RequestBody body = RequestBody.create(mediaType, content);
+            Request request = new Request.Builder()
+                    .url(REST_API_URL + "accounts?$select=name,address1_latitude,address1_longitude,description,revenue,createdon")
+                    .post(body)
+                    .addHeader("OData-MaxVersion", "4.0")
+                    .addHeader("OData-Version", "4.0")
+                    .addHeader("Accept", "application/json")
+                    .addHeader("Content-Type", "application/json; charset=utf-8")
+                    .addHeader("Prefer", "return=representation")
+                    .addHeader("Authorization", "Bearer " + accessToken)
+                    .build();
+
+            Response response = client.newCall(request).execute();
+
+            String dataReturnedFromCreate = response.body().string();
+
+            System.out.println("End");
+        } catch (IOException e) {
+        }
+    }
 
     public void postAccountBatch() throws MalformedURLException, InterruptedException, ExecutionException {
         try {
@@ -386,7 +409,7 @@ public class MicrosoftDynamicsDao {
             );
 
             FileReader fr = new FileReader(f);
-            char[] letters = new char[(int)f.length()];
+            char[] letters = new char[(int) f.length()];
             fr.read(letters);
             fr.close();
             String content = new String(letters);
@@ -405,7 +428,7 @@ public class MicrosoftDynamicsDao {
 
             Response response = client.newCall(request).execute();
             System.out.println("end");
+        } catch (IOException e) {
         }
-        catch (IOException e) {}
     }
 }

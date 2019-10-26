@@ -10,16 +10,16 @@ public class Main {
         MicrosoftDynamicsDao microsoftDynamicsDao = MicrosoftDynamicsDao.getInstance();
 
         try {
-            microsoftDynamicsDao.postAccountBatch();
+            microsoftDynamicsDao.getEntityAuditHistory();
         }
         catch (MalformedURLException e) {
-            System.out.println("MalformedURLException ");
+            System.out.println("MalformedURLException");
         }
         catch (InterruptedException e) {
-            System.out.println("InterruptedException ");
+            System.out.println("InterruptedException");
         }
         catch (ExecutionException e) {
-            System.out.println("ExecutionException, have you provided the correct client id and secret pair? ");
+            System.out.println("ExecutionException, have you provided the correct client id and secret pair?");
         }
     }
 }
