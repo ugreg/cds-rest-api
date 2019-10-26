@@ -1,6 +1,6 @@
 {
-  "OptionSetName": "{OPTIONSET_NAME}",
-  "Value": "{VALUE}",
+  "OptionSetName": "OPTIONSET_NAME",
+  "Value": "VALUE",
   "Label": {
     "LocalizedLabels": [
       {
@@ -25,15 +25,15 @@
         "Label": "",
         "LanguageCode": 1033,
         "IsManaged": false,
-        "MetadataId": "{METADATA_ID}",
+        "MetadataId": "METADATA_ID",
         "HasChanged": null
       }
     ],
     "UserLocalizedLabel": {
-      "Label": "{LABEL}",
+      "Label": "LABEL",
       "LanguageCode": 1033,
       "IsManaged": false,
-      "MetadataId": "{METADATA_ID}",
+      "MetadataId": "METADATA_ID",
       "HasChanged": null
     }
   }

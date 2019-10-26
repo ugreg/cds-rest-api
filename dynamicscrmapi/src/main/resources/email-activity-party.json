@@ -1,0 +1,8 @@
+{
+  "email_activity_parties": [
+    {
+      "partyid_systemuser@odata.bind": "/systemusers(SYSTEM_USER_ID)",
+      "participationtypemask": 1
+    }
+  ]
+}
