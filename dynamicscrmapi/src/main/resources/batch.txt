@@ -9,7 +9,7 @@ Content-ID: 1
 POST https://msott.api.crm.dynamics.com/api/data/v9.0/accounts HTTP/1.1
 Content-Type: application/json;type=entry
 
-{"name":"BATCH SIX"}
+{"name":"JAVA BATCH 1"}
 
 --changeset_BBB456
 Content-Type: application/http
@@ -19,7 +19,7 @@ Content-ID: 2
 POST https://msott.api.crm.dynamics.com/api/data/v9.0/accounts HTTP/1.1
 Content-Type: application/json;type=entry
 
-{"name":"BATCH FIVE"}
+{"name":"JAVA BATCH 2"}
 
 --changeset_BBB456
 Content-Type: application/http
@@ -29,7 +29,7 @@ Content-ID: 3
 POST https://msott.api.crm.dynamics.com/api/data/v9.0/accounts HTTP/1.1
 Content-Type: application/json;type=entry
 
-{"name":"BATCH FOUR"}
+{"name":"JAVA BATCH 3"}
 
 --changeset_BBB456--
 --batch_AAA123--
