@@ -3,6 +3,8 @@ language: java
 jdk:
 - oraclejdk11
 
+script: mvn test -B
+
 cache:
   directories:
   - $HOME/.m2
