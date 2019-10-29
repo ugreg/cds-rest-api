@@ -1,0 +1,10 @@
+language: java
+
+jdk:
+- oraclejdk11
+
+script: mvn test -B -f dynamicscrmapi/pom.xml
+
+cache:
+  directories:
+  - $HOME/.m2

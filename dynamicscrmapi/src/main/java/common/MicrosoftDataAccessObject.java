@@ -20,7 +20,7 @@ public abstract class MicrosoftDataAccessObject {
     protected String resource;
     protected String restApiUrl;
     protected String clientId = "64f4cba8-0656-4ccd-8c2a-fd269fe7636f";
-    protected String clientSecret = "";
+    protected String clientSecret = "YOUR_CLIENT_SECRET";
     protected String accessToken = "";
     protected OkHttpClient okHttpClient;
 
