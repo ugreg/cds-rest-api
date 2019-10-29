@@ -8,6 +8,14 @@
     <artifactId>dynamicscrmapi</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <name>CDS Java</name>
+    <description>Common Data Service REST APIs using Java</description>
+
+    <properties>
+        <maven.compiler.source>6</maven.compiler.source>
+        <maven.compiler.target>6</maven.compiler.target>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.microsoft.azure</groupId>

@@ -1,6 +1,5 @@
 import common.DynamicsDao;
 
-import javafx.util.Pair;
 import okhttp3.*;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.AbstractMap;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
@@ -324,7 +324,7 @@ public class DynamicsDaoTest {
             MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
             RequestBody body = RequestBody.create(mediaType, content);
             String path = "accounts?$select=name,address1_latitude,address1_longitude,description,revenue,createdon";
-            Pair<String, String> headers = new Pair<String, String>("Prefer", "return=representation");
+            AbstractMap.SimpleEntry<String, String> headers = new AbstractMap.SimpleEntry<String, String>("Prefer", "return=representation");
             testMicrosoftDynamicsDao.post(path, body, headers);
 
             String goal = "Created and an Account with response data returned.";
@@ -362,7 +362,7 @@ public class DynamicsDaoTest {
             MediaType mediaType = MediaType.parse(changeSetType);
             RequestBody body = RequestBody.create(mediaType, content);
             String path = "$batch";
-            Pair<String, String> headers = new Pair<String, String>("Content-Type", changeSetType);
+            AbstractMap.SimpleEntry<String, String> headers = new AbstractMap.SimpleEntry<String, String>("Content-Type", changeSetType);
             testMicrosoftDynamicsDao.post(path, body, headers);
 
             String goal = "Created accounts in batch from txt file.";

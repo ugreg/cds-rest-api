@@ -1,10 +1,10 @@
 package common;
 
-import javafx.util.Pair;
 import okhttp3.*;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -53,7 +53,7 @@ public class DynamicsDao extends MicrosoftDataAccessObject {
         }
     }
 
-    public void post(String path, RequestBody body, Pair<String, String>... additionalHeaders)
+    public void post(String path, RequestBody body, AbstractMap.SimpleEntry<String, String>... additionalHeaders)
             throws MalformedURLException, InterruptedException, ExecutionException {
         try {
             okHttpClient = new OkHttpClient();
@@ -68,7 +68,7 @@ public class DynamicsDao extends MicrosoftDataAccessObject {
             headersMap.put("Content-Type", "application/json; charset=utf-8");
             headersMap.put("cache-control", "no-cache");
             if (additionalHeaders.length > 0) {
-                for (Pair<String, String> header : additionalHeaders) {
+                for (AbstractMap.SimpleEntry<String, String> header : additionalHeaders) {
                     headersMap.put(header.getKey(), header.getValue());
                 }
             }
