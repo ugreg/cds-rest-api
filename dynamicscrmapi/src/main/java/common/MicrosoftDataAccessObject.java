@@ -19,12 +19,12 @@ public abstract class MicrosoftDataAccessObject {
     protected String tenantId;
     protected String resource;
     protected String restApiUrl;
-    protected String clientId = "64f4cba8-0656-4ccd-8c2a-fd269fe7636f";
-    protected String clientSecret = "YOUR_CLIENT_SECRET";
+    protected String clientId = "49ad43ec-5d60-4471-b111-99d473a1b515";
+    protected String clientSecret = "";
     protected String accessToken = "";
     protected OkHttpClient okHttpClient;
 
-    void authenticate() {
+    public void authenticate() {
         try {
             ExecutorService service = Executors.newFixedThreadPool(1);
             AuthenticationResult result;
@@ -41,6 +41,7 @@ public abstract class MicrosoftDataAccessObject {
             System.out.println("InterruptedException "  + e.getMessage());
         } catch (ExecutionException e) {
             System.out.println("ExecutionException, have you provided the correct client id and secret pair? " +
+                    "Has your secret expired? " +
                     e.getMessage());
         }
     }
