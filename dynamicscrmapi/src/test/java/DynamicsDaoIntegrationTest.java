@@ -21,7 +21,7 @@ import java.util.concurrent.ExecutionException;
 
 import static org.junit.Assert.*;
 
-public class DynamicsDaoTest {
+public class DynamicsDaoIntegrationTest {
 
     private DynamicsDao testMicrosoftDynamicsDao = DynamicsDao.getInstance("msott", "grdegr");
 
