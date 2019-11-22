@@ -40,6 +40,63 @@ public class DynamicsDaoUnitTest {
     }
 
     @Test
+    public void shouldCreateAzureADApp() {
+        /*
+
+        az ad app create --display-name GSTestApp --native-app true
+
+        az ad app permission add --id <APP_ID> --api <resourceAppId> --api-permissions xxx=Scope, xxx=Role
+
+        az ad app permission admin-consent --id <APP_ID>
+
+        permission needed for my app
+
+        Common Data Service "resourceAppId": "00000007-0000-0000-c000-000000000000"
+            user_impersonation delegated
+            "resourceAccess":
+            {
+                "id": "78ce3f0f-a1ce-49c2-8cde-64b5c0896db4",
+                "type": "Scope"
+            }
+
+
+        Microsoft Graph "resourceAppId": "00000003-0000-0000-c000-000000000000"
+            Directory.AccessAsUser.All delegated
+            User.Read.All delegated
+            User.ReadBasic.All delegated
+            User.Read delegated
+            User.Export.All application
+            IdentityRiskyUser.Read.All application
+
+        "resourceAccess": [
+        { Directory.AccessAsUser.All delegated
+            "id": "0e263e50-5827-48a4-b97c-d940288653c7",
+            "type": "Scope"
+        },
+        { User.Read delegated
+            "id": "e1fe6dd8-ba31-4d61-89e7-88639da4683d",
+            "type": "Scope"
+        },
+        { User.Read.All delegated
+            "id": "a154be20-db9c-4678-8ab7-66f6cc099a59",
+            "type": "Scope"
+        },
+        { User.ReadBasic.All delegated
+            "id": "b340eb25-3456-403f-be2f-af7a0d370277",
+            "type": "Scope"
+        },
+        {
+            "id": "dc5007c0-2d7d-4c42-879c-2dab87571379",
+            "type": "Role"
+        },
+        {
+            "id": "405a51b5-8d8d-430b-9842-8be4b0e9f324",
+            "type": "Role"
+        }
+        */
+    }
+
+    @Test
     public void shouldAuthenticateWithAccessToken() {
         String clientId;
         String clientsecret;
