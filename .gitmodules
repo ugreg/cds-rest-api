@@ -1,3 +1,3 @@
 [submodule "lib/MsIdentityJavaWebApp"]
-	path = lib/MsIdentityJavaWebApp
+	path = dynamicscrmapi/lib/MsIdentityJavaWebApp
 	url = https://github.com/Azure-Samples/ms-identity-java-webapp.git

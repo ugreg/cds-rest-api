@@ -1,4 +1,9 @@
 ##########################
+## OS X
+##########################
+.DS_Store
+
+##########################
 ## IntelliJ
 ##########################
 *.iml
@@ -14,9 +19,7 @@ junit*.properties
 IgnoreLexer.java~
 .gradle
 target/
-
-##########################
-## OS X
-##########################
-.DS_Store
-greguniverseadal/src/main/webapp/WEB-INF/web.xml
+*.class
+dynamicscrmapi/.classpath
+dynamicscrmapi/.project
+*.prefs
