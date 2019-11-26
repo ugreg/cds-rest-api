@@ -25,3 +25,5 @@ When you want to update to a newer version cd into the submodule and pull:
 cd lib/my_module
 git pull
 ```
+
+Facing issues? Ensure `Project Settings > Modules` includes main class in the source folders and other content roots for the module.
