@@ -4,8 +4,8 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 
 @Suite.SuiteClasses({
-        TestJunit.class,
-        DynamicsDaoTest.class
+        DynamicsDaoUnitTest.class,
+        DynamicsDaoIntegrationTest.class
 })
 
 public class MicrosoftDataAccessObjectTestSuite { }

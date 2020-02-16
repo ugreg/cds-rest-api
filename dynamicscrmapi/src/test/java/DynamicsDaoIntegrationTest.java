@@ -1,5 +1,6 @@
 import common.DynamicsDao;
 
+import junit.framework.Assert;
 import okhttp3.*;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,21 +19,23 @@ import java.util.Queue;
 import java.util.Stack;
 import java.util.concurrent.ExecutionException;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
-public class DynamicsDaoTest {
+public class DynamicsDaoIntegrationTest {
 
     private DynamicsDao testMicrosoftDynamicsDao = DynamicsDao.getInstance("msott", "grdegr");
 
     /**
-     * Get audit history for an entity.
+     * Get audit history for an entity. Pass when find at least one different record in an audit.
      * AuditDetails collects all audits, most recent change to an entity is in front of queue.
      * @see https://msott.api.crm.dynamics.com/api/data/v9.0/RetrieveRecordChangeHistory(Target=@tid, PagingInfo=@pi)?@tid={'@odata.id':'accounts(da084227-2f4b-e911-a830-000d3a1d5a4d)'}&@pi=null
      */
     @Test
     public void getEntityAuditHistory() throws MalformedURLException, InterruptedException, ExecutionException {
+        String methodName = "getEntityAuditHistory()";
+        long startTime = System.currentTimeMillis();
+        System.out.println("Start " + methodName);
         try {
-            System.out.println("getEntityAuditHistory()");
             String accountId = "da084227-2f4b-e911-a830-000d3a1d5a4d";
             String path = "RetrieveRecordChangeHistory%28" +
                     "Target=@tid,%20" +
@@ -43,30 +46,47 @@ public class DynamicsDaoTest {
             String responseString = testMicrosoftDynamicsDao.get(path);
             JSONObject odataResponse = new JSONObject(responseString);
 
-            JSONArray auditDetails = odataResponse.getJSONObject("AuditDetailCollection").getJSONArray("AuditDetails");
-            auditDetails.length();
-
-            Queue<JSONObject> auditHistory = new LinkedList<JSONObject>();
-            for (Object o : auditDetails) {
-                JSONObject jo = (JSONObject) o;
-                auditHistory.add(jo);
+            if (odataResponse.has("error")) {
+                if (odataResponse.getJSONObject("error").getString("code") == "0x80072560" ||
+                        odataResponse.getJSONObject("error").getString("message") == "The user is not a member " +
+                                "of the organization.") {
+                    fail("The user is not a member of the organization. Your application user may have the incorrect " +
+                            "Application ID assigned.");
+                }
             }
 
-            String anOldValue = auditHistory.peek().getJSONObject("OldValue").toString();
-            String aNewValue = auditHistory.peek().getJSONObject("NewValue").toString();
-            System.out.println("Old value " + anOldValue);
-            System.out.println("New value " + aNewValue);
-            String goal = "Old and new value have different data";
-            assertEquals(goal, goal);
-            System.out.println("end");
+            JSONArray auditDetails = odataResponse.getJSONObject("AuditDetailCollection").getJSONArray("AuditDetails");
+            int len = auditDetails.length();
+
+            if (len == 0) {
+                assertTrue("Passed. Got empty audit for entity.", true);
+            } else {
+                // Removed, will cause poor performance for large audits
+                // Queue<JSONObject> auditHistory = new LinkedList<JSONObject>();
+                // for (Object o : auditDetails) {
+                //     JSONObject jo = (JSONObject) o;
+                //     auditHistory.add(jo);
+                // }
+
+                String oldValue = auditDetails.getJSONObject(0).getJSONObject("OldValue").toString();
+                String newValue = auditDetails.getJSONObject(0).getJSONObject("NewValue").toString();
+                Assert.assertNotSame("Audit passed. New and old values are different", oldValue, newValue);
+            }
+
+            System.out.println("End " + methodName + "  " +
+                    Long.toString(System.currentTimeMillis() - startTime) + "ms");
         } catch (MalformedURLException e) {
             e.printStackTrace();
+            fail();
         } catch (InterruptedException e) {
             e.printStackTrace();
+            fail();
         } catch (ExecutionException e) {
             e.printStackTrace();
+            fail();
         } catch (JSONException e) {
             e.printStackTrace();
+            fail();
         }
     }
 
