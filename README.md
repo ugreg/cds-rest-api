@@ -1,10 +1,11 @@
-<div align="center"><img src="img/pupadoo.svg"></div>
+<p align="center"><img src="img/red.png"></p>
 
-[![Build Status](https://travis-ci.org/gregdegruy/dynamics-rest-api.svg?branch=master)](https://travis-ci.org/gregdegruy/dynamics-rest-api)
+| <img src="img/poke.svg" height="16"> [![License: MIT](https://img.shields.io/badge/License-MIT-grey.svg)](https://opensource.org/licenses/MIT) | <img src="img/poke.svg" height="16"> [![Build Status](https://travis-ci.org/gregdegruy/dynamics-rest-api.svg?branch=master)](https://travis-ci.org/gregdegruy/dynamics-rest-api) |
+| :- | :- |
 
-# Dynamics REST APIs in Java
+# Common Data Service (CDS) REST APIs in Java
 
-Dynamics 365 REST API in Java. Data Access Object controls interactions with the server,. Run the JUnit test to verify.
+CDS / Dynamics 365 REST API in Java. Data Access Object controls interactions with the server. Run the JUnit test to verify.
 
 # Setup
 
