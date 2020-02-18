@@ -1,6 +1,6 @@
 <p align="center"><img src="img/red.png"></p>
 
-| <img src="img/poke.svg" height="16"> [![License: MIT](https://img.shields.io/badge/License-MIT-grey.svg)](https://opensource.org/licenses/MIT) | <img src="img/poke.svg" height="16"> [![Build Status](https://travis-ci.org/gregdegruy/dynamics-rest-api.svg?branch=master)](https://travis-ci.org/gregdegruy/dynamics-rest-api) |
+| <img src="img/poke.svg" height="16"> [![License: MIT](https://img.shields.io/badge/License-MIT-grey.svg)](https://opensource.org/licenses/MIT) | <img src="img/poke.svg" height="16"> [![Build Status](https://travis-ci.org/gregdegruy/dynamics-cds-api.svg?branch=master)](https://travis-ci.org/gregdegruy/dynamics-cds-api) |
 | :- | :- |
 
 # Common Data Service (CDS) REST APIs in Java
